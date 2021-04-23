@@ -122,7 +122,10 @@ export default class Formatter {
           this.indentation.decreaseBlockLevel();
         }
         query = this.addNewline(this.addNewline(query));
-        if (!token.value.match(/^\/\*%.*end.*\*\/$/u) && token.value.match(/\/\*%.*((if)|(for)).*\*\//u)) {
+        if (
+          !token.value.match(/^\/\*%.*end.*\*\/$/u) &&
+          token.value.match(/\/\*%.*((if)|(for)).*\*\//u)
+        ) {
           // start if, for
           this.indentation.increaseBlockLevel();
         }
