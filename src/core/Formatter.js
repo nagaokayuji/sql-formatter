@@ -110,8 +110,8 @@ export default class Formatter {
   }
 
   formatBlockComment(token, query) {
-    if (this.cfg.isDoma) {
-      return this.addNewline(query) + this.indentComment(token.value);
+    if (this.cfg.isDoma && !token.value.match(/^\/\*[#%]/u) && token.value.match(/.*\*\/$/u)) {
+      return query + this.indentComment(token.value);
     }
     return this.addNewline(this.addNewline(query) + this.indentComment(token.value));
   }

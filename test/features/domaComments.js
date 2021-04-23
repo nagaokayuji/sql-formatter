@@ -130,9 +130,27 @@ export default function supportsDomaComments(format) {
       FROM
         tbl
       WHERE
-        hoge =
-        /* ishoge */1
+        hoge = /* ishoge */1
         /*# orderBy */
+    `);
+  });
+
+  it('doma bindings [if]', () => {
+    const result = format(`
+      SELECT * FROM employee WHERE
+      /*%if employeeId != null */
+          employee_id = /* employeeId */99
+      /*%end*/
+    `);
+    expect(result).toBe(dedent`
+      SELECT
+        *
+      FROM
+        employee
+      WHERE
+        /*%if employeeId != null */
+        employee_id = /* employeeId */99
+        /*%end*/
     `);
   });
 }
