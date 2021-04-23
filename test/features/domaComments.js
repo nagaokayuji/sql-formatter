@@ -149,8 +149,36 @@ export default function supportsDomaComments(format) {
         employee
       WHERE
         /*%if employeeId != null */
-        employee_id = /* employeeId */99
+          employee_id = /* employeeId */99
         /*%end*/
+    `);
+  });
+
+  it('doma bindings [additional]', () => {
+    const result = format(`
+      SELECT * FROM employee WHERE
+      /*%for name : names */
+      employee_name LIKE /* name */'hoge'
+        /*%if name_has_next */
+      /*# "or" */
+        /*%end */
+      /*%end*/
+      OR
+      salary > 1000
+    `);
+    expect(result).toBe(dedent`
+      SELECT
+        *
+      FROM
+        employee
+      WHERE
+        /*%for name : names */
+          employee_name LIKE /* name */'hoge'
+          /*%if name_has_next */
+            /*# "or" */
+          /*%end */
+        /*%end*/
+        OR salary > 1000
     `);
   });
 }
