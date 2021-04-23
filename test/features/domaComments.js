@@ -114,4 +114,25 @@ export default function supportsDomaComments(format) {
         /*Comment
     `);
   });
+
+  it('doma bindings', () => {
+    const result = format(`
+      SELECT count(*)
+      FROM
+      tbl
+      WHERE
+      hoge = /* ishoge */1
+      /*# orderBy */
+    `);
+    expect(result).toBe(dedent`
+      SELECT
+        count(*)
+      FROM
+        tbl
+      WHERE
+        hoge =
+        /* ishoge */1
+        /*# orderBy */
+    `);
+  });
 }
