@@ -13,6 +13,7 @@ export default class Formatter {
    *  @param {Boolean} cfg.uppercase
    *  @param {Integer} cfg.linesBetweenQueries
    *  @param {Object} cfg.params
+   *  @param {Object} cfg.isDoma
    */
   constructor(cfg) {
     this.cfg = cfg;
@@ -109,6 +110,9 @@ export default class Formatter {
   }
 
   formatBlockComment(token, query) {
+    if (this.cfg.isDoma) {
+      return this.addNewline(query) + this.indentComment(token.value);
+    }
     return this.addNewline(this.addNewline(query) + this.indentComment(token.value));
   }
 
