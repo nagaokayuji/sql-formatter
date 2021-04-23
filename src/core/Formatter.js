@@ -111,15 +111,18 @@ export default class Formatter {
 
   formatBlockComment(token, query) {
     if (this.cfg.isDoma) {
-      if (!token.value.match(/^\/\*[#%]/u) && token.value.match(/.*\*\/$/u)) {
+      if (
+        token.value.match(/\/\*%.*expand.*\*\/$/u) ||
+        (!token.value.match(/^\/\*[#%]/u) && token.value.match(/.*\*\/$/u))
+      ) {
         return query + this.indentComment(token.value);
       } else {
-        if (token.value.match(/^\/\*%.*end.*\*\/$/u)) {
+        if (token.value.match(/^\/\*%.*((else)|(end)).*\*\/$/u)) {
           // end block
           this.indentation.decreaseBlockLevel();
         }
         query = this.addNewline(this.addNewline(query));
-        if (!token.value.match(/^\/\*%.*end.*\*\/$/u) && token.value.match(/\/\*%.*/u)) {
+        if (!token.value.match(/^\/\*%.*end.*\*\/$/u) && token.value.match(/\/\*%.*((if)|(for)).*\*\//u)) {
           // start if, for
           this.indentation.increaseBlockLevel();
         }

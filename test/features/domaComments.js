@@ -140,6 +140,9 @@ export default function supportsDomaComments(format) {
       SELECT * FROM employee WHERE
       /*%if employeeId != null */
           employee_id = /* employeeId */99
+        /*%elseif condition */
+        condition = /* hogehoge */''
+      
       /*%end*/
     `);
     expect(result).toBe(dedent`
@@ -150,6 +153,8 @@ export default function supportsDomaComments(format) {
       WHERE
         /*%if employeeId != null */
           employee_id = /* employeeId */99
+        /*%elseif condition */
+          condition = /* hogehoge */''
         /*%end*/
     `);
   });
@@ -179,6 +184,20 @@ export default function supportsDomaComments(format) {
           /*%end */
         /*%end*/
         OR salary > 1000
+    `);
+  });
+
+  it('doma expand', () => {
+    const result = format(`
+      SELECT /*%expand */* FROM employee WHERE /*# condition */
+    `);
+    expect(result).toBe(dedent`
+      SELECT
+        /*%expand */*
+      FROM
+        employee
+      WHERE
+        /*# condition */
     `);
   });
 }
