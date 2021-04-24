@@ -14,7 +14,7 @@ export default function supportsDomaComments(format) {
       * FROM
       -- This is another comment
       MyTable -- One final comment
-      WHERE 1 = 2;
+      WHERE 1 != 2;
     `);
     expect(result).toBe(dedent`
       SELECT
@@ -25,7 +25,7 @@ export default function supportsDomaComments(format) {
         -- This is another comment
         MyTable -- One final comment
       WHERE
-        1 = 2;
+        1 != 2;
     `);
   });
 
@@ -139,7 +139,8 @@ export default function supportsDomaComments(format) {
     const result = format(`
       SELECT * FROM employee WHERE
       /*%if employeeId != null */
-          employee_id = /* employeeId */99
+          employee_id != /* employeeId */99
+        AND some_str != '9'
         /*%elseif condition */
         condition = /* hogehoge */''
       
@@ -152,7 +153,8 @@ export default function supportsDomaComments(format) {
         employee
       WHERE
         /*%if employeeId != null */
-          employee_id = /* employeeId */99
+          employee_id != /* employeeId */99
+          AND some_str != '9'
         /*%elseif condition */
           condition = /* hogehoge */''
         /*%end*/
