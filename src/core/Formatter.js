@@ -70,6 +70,8 @@ export default class Formatter {
 
       if (token.type === tokenTypes.LINE_COMMENT) {
         formattedQuery = this.formatLineComment(token, formattedQuery);
+      } else if (token.type === tokenTypes.DOMA_DIRECTIVE) {
+        formattedQuery = this.formatDomaDialect(token, formattedQuery);
       } else if (token.type === tokenTypes.BLOCK_COMMENT) {
         formattedQuery = this.formatBlockComment(token, formattedQuery);
       } else if (token.type === tokenTypes.RESERVED_TOP_LEVEL) {
@@ -109,31 +111,34 @@ export default class Formatter {
     return this.addNewline(query + this.show(token));
   }
 
-  formatBlockComment(token, query) {
-    if (this.cfg.isDoma) {
-      if (
-        token.value.match(/\/\*%.*expand.*\*\/$/u) ||
-        (!token.value.match(/^\/\*[#%]/u) && token.value.match(/.*\*\/$/u))
-      ) {
-        return query + this.indentComment(token.value);
-      } else {
-        if (token.value.match(/^\/\*%.*((else)|(end)).*\*\/$/u)) {
-          // end block
-          this.indentation.decreaseBlockLevel();
-        }
-        query = this.addNewline(this.addNewline(query));
-        if (
-          !token.value.match(/^\/\*%.*end.*\*\/$/u) &&
-          token.value.match(/\/\*%.*((if)|(for)).*\*\//u)
-        ) {
-          // start if, for
-          this.indentation.increaseBlockLevel();
-        }
-        query += this.addNewline(this.indentComment(token.value));
-      }
-      return query;
+  formatDomaDialect(token, query) {
+    if (!this.cfg.isDoma) {
+      return this.formatBlockComment(token, query);
     }
-    // normal sql
+    if (
+      token.value.match(/\/\*%.*expand.*\*\/$/u) ||
+      (!token.value.match(/^\/\*[#%]/u) && token.value.match(/.*\*\/$/u))
+    ) {
+      return query + this.indentComment(token.value);
+    } else {
+      if (token.value.match(/^\/\*%.*((else)|(end)).*\*\/$/u)) {
+        // end block
+        this.indentation.decreaseBlockLevel();
+      }
+      query = this.addNewline(this.addNewline(query));
+      if (
+        !token.value.match(/^\/\*%.*end.*\*\/$/u) &&
+        token.value.match(/\/\*%.*((if)|(for)).*\*\//u)
+      ) {
+        // start if, for
+        this.indentation.increaseBlockLevel();
+      }
+      query += this.addNewline(this.indentComment(token.value));
+    }
+    return query;
+  }
+
+  formatBlockComment(token, query) {
     return this.addNewline(this.addNewline(query) + this.indentComment(token.value));
   }
 

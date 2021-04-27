@@ -28,7 +28,7 @@ export default class Tokenizer {
       '>=',
       ...(cfg.operators || []),
     ]);
-
+    this.DOMA_DIRECTIVE_REGEX = /^(\/\*([^*+=;()&]|[a$@"'#%])[^]*?\*\/)/u;
     this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/u;
     this.LINE_COMMENT_REGEX = regexFactory.createLineCommentRegex(cfg.lineCommentTypes);
 
@@ -98,6 +98,7 @@ export default class Tokenizer {
 
   getNextToken(input, previousToken) {
     return (
+      this.getDomaDialectToken(input) ||
       this.getCommentToken(input) ||
       this.getStringToken(input) ||
       this.getOpenParenToken(input) ||
@@ -119,6 +120,14 @@ export default class Tokenizer {
       input,
       type: tokenTypes.LINE_COMMENT,
       regex: this.LINE_COMMENT_REGEX,
+    });
+  }
+
+  getDomaDialectToken(input) {
+    return this.getTokenOnFirstMatch({
+      input,
+      type: tokenTypes.DOMA_DIRECTIVE,
+      regex: this.DOMA_DIRECTIVE_REGEX,
     });
   }
 

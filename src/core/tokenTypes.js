@@ -12,6 +12,7 @@ export default {
   OPEN_PAREN: 'open-paren',
   CLOSE_PAREN: 'close-paren',
   LINE_COMMENT: 'line-comment',
+  DOMA_DIRECTIVE: 'doma-directive',
   BLOCK_COMMENT: 'block-comment',
   NUMBER: 'number',
   PLACEHOLDER: 'placeholder',
