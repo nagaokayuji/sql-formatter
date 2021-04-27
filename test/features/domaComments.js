@@ -143,7 +143,7 @@ export default function supportsDomaComments(format) {
         AND some_str != '9'
         /*%elseif condition */
         condition = /* hogehoge */''
-      
+
       /*%end*/
     `);
     expect(result).toBe(dedent`
@@ -200,6 +200,20 @@ export default function supportsDomaComments(format) {
         employee
       WHERE
         /*# condition */
+    `);
+  });
+  it('doma literal variable directive', () => {
+    const result = format(`
+      SELECT
+       * FROM employee WHERE code = /*^ code */'test'
+    `);
+    expect(result).toBe(dedent`
+      SELECT
+        *
+      FROM
+        employee
+      WHERE
+        code = /*^ code */'test'
     `);
   });
 }

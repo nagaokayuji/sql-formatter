@@ -28,7 +28,7 @@ export default class Tokenizer {
       '>=',
       ...(cfg.operators || []),
     ]);
-    this.DOMA_DIRECTIVE_REGEX = /^(\/\*([^*+=;()&]|[a$@"'#%])[^]*?\*\/)/u;
+    this.DOMA_DIRECTIVE_REGEX = /^(\/\*([^*+=;()&]|[a$@"'#%^])[^]*?\*\/)/u;
     this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/u;
     this.LINE_COMMENT_REGEX = regexFactory.createLineCommentRegex(cfg.lineCommentTypes);
 
