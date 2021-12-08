@@ -29,7 +29,6 @@ function getArgs() {
     default: 'sql',
   });
 
-
   parser.add_argument('--is-doma', {
     help: 'Format using doma syntax',
     choices: ['true', 'false'],
