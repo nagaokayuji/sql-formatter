@@ -29,6 +29,12 @@ function getArgs() {
     default: 'sql',
   });
 
+  parser.add_argument('--is-doma', {
+    help: 'Format using doma syntax',
+    choices: ['true', 'false'],
+    default: 'true',
+  });
+
   const indentationGroup = parser.add_mutually_exclusive_group();
   indentationGroup.add_argument('-i', '--indent', {
     help: 'Number of spaces to indent query blocks (defaults to 2)',
@@ -67,6 +73,7 @@ function configFromArgs(args) {
     indent: args.tab_indent ? '\t' : ' '.repeat(args.indent),
     uppercase: args.uppercase,
     linesBetweenQueries: args.lines_between_queries,
+    isDoma: args.is_doma === 'false' ? false : true,
   };
 }
 

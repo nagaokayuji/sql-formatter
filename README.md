@@ -56,6 +56,7 @@ format('SELECT * FROM tbl', {
   indent: '    ', // Defaults to two spaces
   uppercase: bool, // Defaults to false (not safe to use when SQL dialect has case-sensitive identifiers)
   linesBetweenQueries: 2, // Defaults to 1
+  isDoma: true, // Defaults to false
 });
 ```
 
@@ -109,6 +110,8 @@ optional arguments:
   -l {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql},
   --language {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}
                         SQL Formatter dialect (defaults to basic sql)
+  --is-doma {true,false}
+                        Format using doma syntax
   -i N, --indent N      Number of spaces to indent query blocks (defaults to 2)
   -t, --tab-indent      Indent query blocks with tabs instead of spaces
   -u, --uppercase       Capitalize language keywords
